@@ -2,11 +2,19 @@ import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
 
 const ExcelToJsonConverter = () => {
+    // Estado para almacenar los datos del archivo Excel
     const [jsonData, setJsonData] = useState(null);
+
+    // Estado para almacenar los datos filtrados por búsqueda
     const [filteredData, setFilteredData] = useState(null);
+
+    // Estado para almacenar el texto de búsqueda
     const [searchText, setSearchText] = useState('');
+
+    // Estado para mostrar un mensaje de carga mientras se obtienen los datos
     const [isLoading, setIsLoading] = useState(true);
 
+    // Efecto para cargar los datos desde la URL al montar el componente
     useEffect(() => {
         const fetchExcelData = async () => {
             const url = 'https://urosario.edu.co/sites/default/files/2023-07/Reporte-24-de-julio.xlsx';
@@ -20,7 +28,7 @@ const ExcelToJsonConverter = () => {
                 const json = XLSX.utils.sheet_to_json(sheet);
 
                 setJsonData(json);
-                setFilteredData(json);
+                setFilteredData(json); // Al cargar el archivo, mostramos todos los datos sin filtrar
                 setIsLoading(false);
 
             } catch (error) {
@@ -32,28 +40,29 @@ const ExcelToJsonConverter = () => {
         fetchExcelData();
     }, []);
 
+    // Función para filtrar los datos en función del texto de búsqueda
     const handleSearch = () => {
-        const filteredData = jsonData.filter((arr) =>
-            arr.some((item) => {
-                if (item[1] && typeof item[1] === "string") {
-                    return item[1].toLowerCase().includes(searchText.toLowerCase());
+        const filteredData = jsonData.filter((item) => {
+            // Comprobamos si alguna propiedad del objeto contiene el texto de búsqueda
+            return Object.values(item).some((value) => {
+                if (value && typeof value === "string") {
+                    return value.toLowerCase().includes(searchText.toLowerCase());
                 }
                 return false;
-            })
-        );
+            });
+        });
+
         setFilteredData(filteredData);
     };
 
+    // Función para limpiar el filtro y mostrar todos los datos nuevamente
     const handleClearSearch = () => {
-        setFilteredData(jsonData);
+        setFilteredData(jsonData); // Al limpiar la búsqueda, volvemos a mostrar todos los datos sin filtrar
         setSearchText('');
     };
 
-    let dataToDisplay = filteredData || jsonData; // Utilizamos una variable local para el mapeo
-
-    if (searchText !== '') {
-        dataToDisplay = filteredData; // Si hay un valor de búsqueda, mostramos los datos filtrados
-    }
+    // Variable que determina qué datos se muestran, filtrados o no, según el texto de búsqueda
+    const dataToDisplay = searchText !== '' ? filteredData : jsonData;
 
     return (
         <div>
@@ -61,7 +70,6 @@ const ExcelToJsonConverter = () => {
                 <p>Cargando datos...</p>
             ) : (
                 <>
-                    <input type="file" onChange={() => { }} />
                     <div>
                         <input
                             type="text"
@@ -73,15 +81,16 @@ const ExcelToJsonConverter = () => {
                         <button onClick={handleClearSearch}>Limpiar</button>
                     </div>
 
-                    {dataToDisplay ? dataToDisplay.map((arr, index) => (
+                    {/* Renderizado condicional de los datos */}
+                    {dataToDisplay ? dataToDisplay.map((item, index) => (
                         <div className="col-12 col-md-6 col-lg-6 mb-1" key={index}>
                             <div className="card">
                                 <div className="row">
                                     <div className="col-12 col-md-7 col-lg-7 card-equipo__body">
-                                        <p>Nombres: {arr.NOMBRES}</p>
-                                        <p>Correo: {arr.CORREO_PERSONAL}</p>
-                                        <p>Área: {arr.AREA}</p>
-                                        <p>Departamento: {arr.DEPARTAMENTO}</p>
+                                        <p>Nombres: {item.NOMBRES}</p>
+                                        <p>Correo: {item.CORREO_PERSONAL}</p>
+                                        <p>Área: {item.AREA}</p>
+                                        <p>Departamento: {item.DEPARTAMENTO}</p>
                                     </div>
                                 </div>
                             </div>
