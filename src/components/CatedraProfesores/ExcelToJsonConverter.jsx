@@ -24,6 +24,7 @@ const ExcelToJsonConverter = () => {
                 const sheet = workbook.Sheets[sheetName];
                 const json = XLSX.utils.sheet_to_json(sheet);
 
+                
                 // Filtrado de datos basado en la ruta URL y condiciones específicas
                 const allowedDepartments = [
                     "ESC MEDICINA Y CIENCIAS SALUD",
@@ -36,13 +37,10 @@ const ExcelToJsonConverter = () => {
                     "ESCUELA DE CIENCIAS HUMANAS",
                 ];
 
-                const filteredData = json.filter(item => {
-                    const entries2 = Object.entries(item);
-                    return window.location.href === "http://localhost:3000/" && allowedDepartments.includes(entries2[3][1]);
-                });
-
-                setJsonData(json);
-                setFilteredData(filteredData);
+                const currentURL = window.location.href;
+                const showData = currentURL === "https://urosario.edu.co/prueba-consumo-excel";
+                const arrObject = showData ? json.filter(item => allowedDepartments.includes(item.DEPARTAMENTO)) : [];
+                setJsonData(arrObject);
                 setIsLoading(false);
             } catch (error) {
                 console.error('Error al cargar el archivo Excel: ', error);
