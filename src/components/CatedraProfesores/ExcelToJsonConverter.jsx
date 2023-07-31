@@ -25,22 +25,32 @@ const ExcelToJsonConverter = () => {
                 const json = XLSX.utils.sheet_to_json(sheet);
 
                 
-                // Filtrado de datos basado en la ruta URL y condiciones específicas
-                const allowedDepartments = [
-                    "ESC MEDICINA Y CIENCIAS SALUD",
-                    "FAC ESTUDIOS INTLES POLÍTICOS",
-                    "FACULTAD JURISPRUDENCIA",
-                    "ESCUELA DE ADMINISTRACIÓN",
-                    "FACULTAD DE CIENCIAS NATURALES",
-                    "FACULTAD ECONOMÍA",
-                    "ESC INGENIERÍA, CIENCIA Y TECN",
-                    "ESCUELA DE CIENCIAS HUMANAS",
-                ];
-
+                // Filtrado de datos basado en la ruta URL y condiciones específicas                
                 const currentURL = window.location.href;
-                const showData = currentURL === "https://urosario.edu.co/prueba-consumo-excel";
-                const arrObject = showData ? json.filter(item => allowedDepartments.includes(item.DEPARTAMENTO)) : [];
-                setJsonData(arrObject);
+                
+                const getDepartmentFromURL = (url) => {
+                    if (url.includes("escuela-de-medicina-y-ciencias-de-la-salud")) {
+                        return "ESC MEDICINA Y CIENCIAS SALUD";
+                    } else if (url.includes("escuela-de-administracion")) {
+                        return "ESCUELA DE ADMINISTRACIÓN";
+                    } else if (url.includes("facultad-de-jurisprudencia")) {
+                        return "FACULTAD JURISPRUDENCIA";
+                    } else if (url.includes("facultad-de-ciencias-naturales")) {
+                        return "FACULTAD DE CIENCIAS NATURALES";
+                    } else if (url.includes("prueba-consumo-excel")) {
+                        return "FACULTAD ECONOMÍA";
+                    } 
+                    // Add more conditions for other departments if needed
+                    return null; // Return null if no matching department is found
+                };
+                
+                const departmentFromURL = getDepartmentFromURL(currentURL);
+                
+                const arrObject = departmentFromURL
+                    ? json.filter(item => item.DEPARTAMENTO === departmentFromURL)
+                    : [];
+                
+                setJsonData(arrObject); 
                 setIsLoading(false);
             } catch (error) {
                 console.error('Error al cargar el archivo Excel: ', error);
