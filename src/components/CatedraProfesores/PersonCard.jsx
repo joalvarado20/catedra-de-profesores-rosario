@@ -1,16 +1,44 @@
 import React from 'react';
 
 const PersonCard = ({ person }) => {
+    const cardStyle = {
+        borderLeft: '4px solid var(--main-page-color)',
+        borderRadius: '9px',
+        padding: '1rem',
+        marginBottom: '1rem',
+    };
+
+    const titleStyle = {
+        color: 'var(--main-page-color)',
+        marginBottom: '11px',
+        fontSize: '1rem',
+    };
+
+    const linkStyle = {
+        color: 'var(--main-page-color)',
+        fontSize: '0.9em',
+    };
+
+    const smallStyle = {
+        fontSize: '0.9em',
+    };
+
+    const iconStyle = {
+        color: 'var(--main-page-color)',
+    };
+
     return (
-        <div className="col-12 col-md-6 col-lg-6 mb-1">
-            <div className="card">
-                <div className="row">
-                    <div className="col-12 col-md-7 col-lg-7 card-equipo__body">
-                        <p>Nombres: {person.NOMBRES}</p>
-                        <p>Correo: {person.CORREO_PERSONAL}</p>
-                        <p>Área: {person.AREA}</p>
-                        <p>Departamento: {person.DEPARTAMENTO}</p>
-                    </div>
+        <div className="row">
+            <div className="col-12 col-md-4 col-lg-4 col-xxl-4">
+                <div className="card-profesores-catedra bg-white p-1 mb-1" style={cardStyle}>
+                    <h4 style={titleStyle}>Nombres: {person.NOMBRES}</h4>
+                    <i className="fas fa-envelope" style={iconStyle}></i>{' '}
+                    <a href="mailto:paola.mesa@urosario.edu.co" style={linkStyle}>
+                        {person.CORREO_PERSONAL}
+                    </a>
+                    <br />
+                    <small style={smallStyle}>{person.DEPARTAMENTO}</small>
+                    <p>Área: {person.AREA}</p>
                 </div>
             </div>
         </div>

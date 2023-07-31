@@ -24,9 +24,25 @@ const ExcelToJsonConverter = () => {
                 const sheet = workbook.Sheets[sheetName];
                 const json = XLSX.utils.sheet_to_json(sheet);
 
-                // Almacenamos los datos en los estados correspondientes
+                // Filtrado de datos basado en la ruta URL y condiciones específicas
+                const allowedDepartments = [
+                    "ESC MEDICINA Y CIENCIAS SALUD",
+                    "FAC ESTUDIOS INTLES POLÍTICOS",
+                    "FACULTAD JURISPRUDENCIA",
+                    "ESCUELA DE ADMINISTRACIÓN",
+                    "FACULTAD DE CIENCIAS NATURALES",
+                    "FACULTAD ECONOMÍA",
+                    "ESC INGENIERÍA, CIENCIA Y TECN",
+                    "ESCUELA DE CIENCIAS HUMANAS",
+                ];
+
+                const filteredData = json.filter(item => {
+                    const entries2 = Object.entries(item);
+                    return window.location.href === "http://localhost:3000/" && allowedDepartments.includes(entries2[3][1]);
+                });
+
                 setJsonData(json);
-                setFilteredData(json); // Al cargar el archivo, mostramos todos los datos sin filtrar
+                setFilteredData(filteredData);
                 setIsLoading(false);
             } catch (error) {
                 console.error('Error al cargar el archivo Excel: ', error);

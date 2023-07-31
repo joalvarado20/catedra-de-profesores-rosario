@@ -1,38 +1,23 @@
-.App {
-  text-align: center;
+.card-profesores-catedra {
+  border-left: 4px solid var(--main-page-color);
+  border-radius: 9px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.card-profesores-catedra h4 {
+  color: var(--main-page-color);
+  margin-bottom: 11px;
+  font-size: 1rem;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.card-profesores-catedra a {
+  color: var(--main-page-color);
+  font-size: 0.9em;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.card-profesores-catedra small {
+  font-size: 0.9em;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.card-profesores-catedra i {
+  color: var(--main-page-color);
 }
