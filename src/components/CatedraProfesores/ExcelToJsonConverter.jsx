@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
 import SearchBar from './SearchBar';
 import PersonCard from './PersonCard';
+import ReactPaginate from 'react-paginate';
 
 const ExcelToJsonConverter = () => {
     // Estados del componente
@@ -15,7 +16,8 @@ const ExcelToJsonConverter = () => {
     // Efecto para cargar los datos desde la URL al montar el componente
     useEffect(() => {
         fetchExcelData();
-    }, []);
+        handleSearch(); // Filtrar inmediatamente al montar el componente
+    }, [searchText]);
 
     // Función para obtener los datos del archivo Excel desde la URL
     const fetchExcelData = async () => {
@@ -66,7 +68,7 @@ const ExcelToJsonConverter = () => {
 
     // Función para filtrar los datos en función del texto de búsqueda
     const handleSearch = () => {
-        const filteredData = jsonData.filter(item => {
+        const filteredData = jsonData?.filter(item => {
             return Object.values(item).some(value => {
                 if (value && typeof value === 'string') {
                     return value.toLowerCase().includes(searchText.toLowerCase());
@@ -74,9 +76,8 @@ const ExcelToJsonConverter = () => {
                 return false;
             });
         });
-
-        setFilteredData(filteredData);
-        setCurrentPage(1); // Reseteamos la página actual a 1 después de realizar la búsqueda
+        setFilteredData(filteredData || []); // Usamos [] si filteredData es null
+        setCurrentPage(1);
     };
 
     // Función para limpiar el filtro y mostrar todos los datos nuevamente
@@ -87,17 +88,19 @@ const ExcelToJsonConverter = () => {
     };
 
     // Variable que determina qué datos se muestran, filtrados o no, según el texto de búsqueda
-    const dataToDisplay = searchText !== '' ? filteredData : jsonData;
+    const dataToDisplay = searchText !== '' ? (filteredData || []) : (jsonData || []);
+
     // Calcula los índices del primer y último elemento que se mostrarán en la página actual
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = dataToDisplay ? dataToDisplay.slice(indexOfFirstItem, indexOfLastItem) : [];
     // Calcula la cantidad total de páginas
+
     const totalPages = Math.ceil((dataToDisplay ? dataToDisplay.length : 0) / itemsPerPage);
 
     // Cambiar de página
-    const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
+    const handlePageChange = ({ selected }) => {
+        setCurrentPage(selected + 1);
     };
 
     return (
@@ -116,7 +119,26 @@ const ExcelToJsonConverter = () => {
                     {/* Renderizamos los elementos individuales */}
                     <RenderItems currentItems={currentItems} />
                     {/* Renderiza los botones de paginación */}
-                    <RenderPagination totalPages={totalPages} currentPage={currentPage} onPageChange={handlePageChange} />
+                    <ReactPaginate
+                        previousLabel={'Anterior'}
+                        nextLabel={'Siguiente'}
+                        pageCount={totalPages}
+                        marginPagesDisplayed={1}
+                        pageRangeDisplayed={5}
+                        onPageChange={handlePageChange}
+                        containerClassName={'pagination'}
+                        subContainerClassName={'pages pagination'}
+                        activeClassName={'active'}
+                        // estilos del paginador
+                        pageClassName="page-item"
+                        pageLinkClassName="page-link"
+                        previousClassName="page-item"
+                        previousLinkClassName="page-link"
+                        nextClassName="page-item"
+                        nextLinkClassName="page-link"
+                        breakClassName="page-item"
+                        breakLinkClassName="page-link"
+                    />
                 </>
             )}
         </div>
@@ -129,23 +151,6 @@ const RenderItems = ({ currentItems }) => {
         <>
             {currentItems.map((item, index) => <PersonCard key={index} person={item} />)}
         </>
-    );
-};
-
-// Componente para renderizar la paginación
-const RenderPagination = ({ totalPages, currentPage, onPageChange }) => {
-    return (
-        <div>
-            {Array.from({ length: totalPages }, (_, index) => index + 1).map(pageNumber => (
-                <button
-                    key={pageNumber}
-                    onClick={() => onPageChange(pageNumber)}
-                    disabled={currentPage === pageNumber}
-                >
-                    {pageNumber}
-                </button>
-            ))}
-        </div>
     );
 };
 
