@@ -24,10 +24,10 @@ const ExcelToJsonConverter = () => {
                 const sheet = workbook.Sheets[sheetName];
                 const json = XLSX.utils.sheet_to_json(sheet);
 
-                
+
                 // Filtrado de datos basado en la ruta URL y condiciones específicas                
                 const currentURL = window.location.href;
-                
+
                 const getDepartmentFromURL = (url) => {
                     if (url.includes("escuela-de-medicina-y-ciencias-de-la-salud")) {
                         return "ESC MEDICINA Y CIENCIAS SALUD";
@@ -37,20 +37,25 @@ const ExcelToJsonConverter = () => {
                         return "FACULTAD JURISPRUDENCIA";
                     } else if (url.includes("facultad-de-ciencias-naturales")) {
                         return "FACULTAD DE CIENCIAS NATURALES";
-                    } else if (url.includes("prueba-consumo-excel")) {
+                    } else if (url.includes("facultad-de-estudios-internacionales-politicos-y-urbanos")) {
+                        return "FAC ESTUDIOS INTLES POLÍTICOS";
+                    } else if (url.includes("escuela-de-ingenieria-ciencia-y-tecnologia")) {
+                        return "ESC INGENIERÍA, CIENCIA Y TECN";
+                    } else if (url.includes("escuela-de-ciencias-humanas")) {
+                        return "ESCUELA DE CIENCIAS HUMANAS";
+                    } else if (url.includes("prueba-consumo-excel")) {  // facultad-de-economia
                         return "FACULTAD ECONOMÍA";
-                    } 
-                    // Add more conditions for other departments if needed
-                    return null; // Return null if no matching department is found
+                    }
+                    return null;
                 };
-                
+
                 const departmentFromURL = getDepartmentFromURL(currentURL);
-                
+
                 const arrObject = departmentFromURL
                     ? json.filter(item => item.DEPARTAMENTO === departmentFromURL)
                     : [];
-                
-                setJsonData(arrObject); 
+
+                setJsonData(arrObject);
                 setIsLoading(false);
             } catch (error) {
                 console.error('Error al cargar el archivo Excel: ', error);
