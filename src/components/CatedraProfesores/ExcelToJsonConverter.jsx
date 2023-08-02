@@ -16,8 +16,13 @@ const ExcelToJsonConverter = () => {
     // Efecto para cargar los datos desde la URL al montar el componente
     useEffect(() => {
         fetchExcelData();
-        handleSearch(); // Filtrar inmediatamente al montar el componente
-    }, [searchText]);
+    }, []); // Usamos el estado searchText directamente aquí
+
+    useEffect(() => {
+        handleSearch(); // Filtrar cada vez que cambie `searchText`
+    }, [searchText]); // Dependencia del estado searchText
+
+
 
     // Función para obtener los datos del archivo Excel desde la URL
     const fetchExcelData = async () => {
@@ -76,7 +81,7 @@ const ExcelToJsonConverter = () => {
                 return false;
             });
         });
-        setFilteredData(filteredData || []); // Usamos [] si filteredData es null
+        setFilteredData(filteredData || []);
         setCurrentPage(1);
     };
 
