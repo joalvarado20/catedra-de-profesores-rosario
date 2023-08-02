@@ -115,14 +115,20 @@ const ExcelToJsonConverter = () => {
             ) : (
                 <>
                     {/* Renderizamos el componente de la barra de búsqueda */}
-                    <SearchBar
-                        searchText={searchText}
-                        onSearchTextChange={setSearchText}
-                        onSearch={handleSearch}
-                        onClearSearch={handleClearSearch}
-                    />
+                    <div className="container mb-1">
+                        <SearchBar
+                            searchText={searchText}
+                            onSearchTextChange={setSearchText}
+                            onSearch={handleSearch}
+                            onClearSearch={handleClearSearch}
+                        />
+                    </div>
                     {/* Renderizamos los elementos individuales */}
-                    <RenderItems currentItems={currentItems} />
+                    <div className="container ">
+                        <div className="row">
+                            <RenderItems currentItems={currentItems} />
+                        </div>
+                    </div>
                     {/* Renderiza los botones de paginación */}
                     <ReactPaginate
                         previousLabel={'Anterior'}

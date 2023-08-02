@@ -4,8 +4,6 @@ const PersonCard = ({ person }) => {
     const cardStyle = {
         borderLeft: '4px solid var(--main-page-color)',
         borderRadius: '9px',
-        padding: '1rem',
-        marginBottom: '1rem',
     };
 
     const titleStyle = {

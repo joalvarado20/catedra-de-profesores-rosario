@@ -20,7 +20,7 @@ const SearchBar = ({ searchText, onSearchTextChange, onSearch }) => {
     };
 
     return (
-        <form className="mb-1 container">
+        <form className="">
             <div className="row d-flex justify-content-center">
                 <div className="col-sm-3">
                     <input

@@ -6,11 +6,7 @@ const App = () => {
 
     return (
         <>
-            <div className="container ">
-                <div className="row">
-                    <ExcelToJsonConverter />
-                </div>
-            </div>
+            <ExcelToJsonConverter />
         </>
     );
 };
