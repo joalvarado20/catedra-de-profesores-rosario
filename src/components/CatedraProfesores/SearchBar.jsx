@@ -8,6 +8,11 @@ const SearchBar = ({ searchText, onSearchTextChange, onSearch }) => {
         setLocalSearchText(event.target.value);
     };
 
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        handleSearch(); // Realiza la búsqueda al presionar "Enter" en el input
+    }
+
     const handleSearch = () => {
         onSearchTextChange(localSearchText); // Actualiza el texto de búsqueda en el componente padre
         onSearch(); // Realiza la búsqueda con el nuevo texto
@@ -20,7 +25,7 @@ const SearchBar = ({ searchText, onSearchTextChange, onSearch }) => {
     };
 
     return (
-        <form className="">
+        <form className="" onSubmit={handleSubmit}>
             <div className="row d-flex justify-content-center">
                 <div className="col-sm-3">
                     <input
