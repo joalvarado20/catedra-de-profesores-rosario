@@ -3,6 +3,8 @@ import * as XLSX from 'xlsx';
 import SearchBar from './SearchBar';
 import PersonCard from './PersonCard';
 import ReactPaginate from 'react-paginate';
+import { getDepartmentFromURL } from '../../helpers/funcions';
+import ErrorMessage from './ErrorMessage';
 
 const ExcelToJsonConverter = () => {
     // Estados del componente
@@ -47,28 +49,6 @@ const ExcelToJsonConverter = () => {
             console.error('Error al cargar el archivo Excel: ', error);
             setIsLoading(false);
         }
-    };
-
-    // Función para obtener el departamento desde la URL
-    const getDepartmentFromURL = (url) => {
-        if (url.includes("escuela-de-medicina-y-ciencias-de-la-salud")) {
-            return "ESC MEDICINA Y CIENCIAS SALUD";
-        } else if (url.includes("escuela-de-administracion")) {
-            return "ESCUELA DE ADMINISTRACIÓN";
-        } else if (url.includes("facultad-de-jurisprudencia")) {
-            return "FACULTAD JURISPRUDENCIA";
-        } else if (url.includes("facultad-de-ciencias-naturales")) {
-            return "FACULTAD DE CIENCIAS NATURALES";
-        } else if (url.includes("facultad-de-estudios-internacionales-politicos-y-urbanos")) {
-            return "FAC ESTUDIOS INTLES POLÍTICOS";
-        } else if (url.includes("escuela-de-ingenieria-ciencia-y-tecnologia")) {
-            return "ESC INGENIERÍA, CIENCIA Y TECN";
-        } else if (url.includes("escuela-de-ciencias-humanas")) {
-            return "ESCUELA DE CIENCIAS HUMANAS";
-        } else if (url.includes("prueba-consumo-excel")) {  // facultad-de-economia
-            return "FACULTAD ECONOMÍA";
-        }
-        return null;
     };
 
     // Función para filtrar los datos en función del texto de búsqueda
@@ -123,12 +103,19 @@ const ExcelToJsonConverter = () => {
                             onClearSearch={handleClearSearch}
                         />
                     </div>
+
+                    {/* Renderizamos el mensaje de error si no hay coincidencias */}
+                    {filteredData && filteredData.length === 0 && searchText && (
+                        <ErrorMessage />
+                    )}
+
                     {/* Renderizamos los elementos individuales */}
                     <div className="container ">
                         <div className="row">
                             <RenderItems currentItems={currentItems} />
                         </div>
                     </div>
+                    
                     {/* Renderiza los botones de paginación */}
                     <ReactPaginate
                         previousLabel={'Anterior'}
