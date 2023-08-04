@@ -51,20 +51,32 @@ const ExcelToJsonConverter = () => {
         }
     };
 
-    // Función para filtrar los datos en función del texto de búsqueda
     const handleSearch = () => {
+        if (!searchText) {
+            // Si no hay texto de búsqueda, muestra todos los datos
+            setFilteredData(jsonData || []);
+            setCurrentPage(1);
+            return;
+        }
+    
         const filteredData = jsonData?.filter(item => {
-            return Object.values(item).some(value => {
+            // Filtrar solo por campos relevantes
+            const fieldsToSearch = [item.NOMBRES, item.CORREO_PERSONAL, item.DEPARTAMENTO];
+            return fieldsToSearch.some(value => {
                 if (value && typeof value === 'string') {
-                    return value.toLowerCase().includes(searchText.toLowerCase());
+                    // Normalizar texto y eliminar espacios en blanco
+                    const normalizedValue = value.toLowerCase().trim();
+                    const normalizedSearchText = searchText.toLowerCase().trim();
+                    // Buscar coincidencias parciales
+                    return normalizedValue.includes(normalizedSearchText);
                 }
                 return false;
             });
-        });
+        });  
         setFilteredData(filteredData || []);
         setCurrentPage(1);
     };
-
+    
     // Función para limpiar el filtro y mostrar todos los datos nuevamente
     const handleClearSearch = () => {
         setFilteredData(null); // Al limpiar la búsqueda, eliminamos el filtro de búsqueda

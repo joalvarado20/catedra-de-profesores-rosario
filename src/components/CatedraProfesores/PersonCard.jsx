@@ -28,7 +28,7 @@ const PersonCard = ({ person }) => {
     return (
             <div className="col-12 col-md-4 col-lg-4 col-xl-4">
                 <div className="card-profesores-catedra bg-white p-1 mb-1" style={cardStyle}>
-                    <h4 style={titleStyle}>Nombres: {person.NOMBRES}</h4>
+                    <h4 style={titleStyle}>{person.NOMBRES}</h4>
                     <i className="fas fa-envelope" style={iconStyle}></i>{' '}
                     <a href="mailto:paola.mesa@urosario.edu.co" style={linkStyle}>
                         {person.CORREO_PERSONAL}
