@@ -25,19 +25,32 @@ const PersonCard = ({ person }) => {
         color: 'var(--main-page-color)',
     };
 
+    // funcion que tranforma en minuscula para despues generar la palabar en UpperCase
+    function capitalizeFirstLetter(str) {
+        if (str) {
+            return str.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+        }
+        return str; // Si la cadena está vacía, devolverla sin cambios
+    }
+
+
     return (
         <div className="col-12 col-md-4 col-lg-4 col-xl-4">
             <div className="card-profesores-catedra bg-white p-1 mb-1" style={cardStyle}>
-                <h4 style={titleStyle}>{person.NOMBRES}</h4>
+                <h4 style={titleStyle}>
+                    {capitalizeFirstLetter(person.EMP_APELLIDO1)}{' '}
+                    {capitalizeFirstLetter(person.EMP_APELLIDO2)},{' '}
+                    {capitalizeFirstLetter(person.EMP_NOMBRE)}
+                </h4>
                 <i className="fas fa-envelope" style={iconStyle}></i>{' '}
-                <a  href={`mailto:${person.CORREO_PERSONAL}`} style={linkStyle}>
-                    {person.CORREO_PERSONAL}
+                <a href={`mailto:${person.CORREO_PERSONAL}`} style={linkStyle}>
+                    {person.CORREO_PERSONAL.toLowerCase()}
                 </a>
                 <br />
                 {(person.UBIC_URO && person.UBIC_URO !== 'SIN REGISTRO') ?
                     <small style={smallStyle}>
                         <i className="fas fa-map-marker-alt" style={iconStyle}></i>{' '}
-                        {person.UBIC_URO}
+                        {capitalizeFirstLetter(person.UBIC_URO)}
                     </small>
                     : null}
                 <p><i className="fas fa-layer-group" style={iconStyle}></i>{' '}{person.AREA}</p>

@@ -6,6 +6,17 @@ import ReactPaginate from 'react-paginate';
 import { getDepartmentFromURL } from '../../helpers/funcions';
 import ErrorMessage from './ErrorMessage';
 
+// Componente para renderizar los elementos individuales en orden alfabetico
+const RenderItems = ({ currentItems }) => {
+    return (
+        <>
+            {currentItems.map((item, index) => (
+                <PersonCard key={index} person={item} />
+            ))}
+        </>
+    );
+};
+
 const ExcelToJsonConverter = () => {
     // Estados del componente
     const [jsonData, setJsonData] = useState(null); // Estado para almacenar los datos del archivo Excel
@@ -87,10 +98,17 @@ const ExcelToJsonConverter = () => {
     // Variable que determina qué datos se muestran, filtrados o no, según el texto de búsqueda
     const dataToDisplay = searchText !== '' ? (filteredData || []) : (jsonData || []);
 
+      // Ordenar los elementos en orden alfabético según EMP_APELLIDO1
+    const sortedData = dataToDisplay.slice().sort((a, b) => {
+        const apellido1A = a.EMP_APELLIDO1;
+        const apellido1B = b.EMP_APELLIDO1;
+        return apellido1A.localeCompare(apellido1B);
+    });
+
     // Calcula los índices del primer y último elemento que se mostrarán en la página actual
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = dataToDisplay ? dataToDisplay.slice(indexOfFirstItem, indexOfLastItem) : [];
+    const currentItems = sortedData.length > 0 ? sortedData.slice(indexOfFirstItem, indexOfLastItem) : [];
     // Calcula la cantidad total de páginas
 
     const totalPages = Math.ceil((dataToDisplay ? dataToDisplay.length : 0) / itemsPerPage);
@@ -152,15 +170,6 @@ const ExcelToJsonConverter = () => {
                 </>
             )}
         </div>
-    );
-};
-
-// Componente para renderizar los elementos individuales
-const RenderItems = ({ currentItems }) => {
-    return (
-        <>
-            {currentItems.map((item, index) => <PersonCard key={index} person={item} />)}
-        </>
     );
 };
 
