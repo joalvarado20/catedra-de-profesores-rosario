@@ -24,7 +24,7 @@ const ExcelToJsonConverter = () => {
     const [searchText, setSearchText] = useState(''); // Estado para almacenar el texto de búsqueda
     const [isLoading, setIsLoading] = useState(true); // Estado para mostrar un mensaje de carga mientras se obtienen los datos
     const [currentPage, setCurrentPage] = useState(1); // Estado para mantener el número de página actual
-    const itemsPerPage = 5; // Define cuántos elementos mostrar por página.
+    const itemsPerPage = 9; // Define cuántos elementos mostrar por página.
 
     // Efecto para cargar los datos desde la URL al montar el componente
     useEffect(() => {
@@ -52,7 +52,15 @@ const ExcelToJsonConverter = () => {
 
             // Filtrado de datos basado en la ruta URL y condiciones específicas
             const departmentFromURL = getDepartmentFromURL(window.location.href);
-            const arrObject = departmentFromURL ? json.filter(item => item.DEPARTAMENTO === departmentFromURL) : [];
+            const uniqueItems = new Set(); // Utilizamos un conjunto para almacenar elementos únicos
+
+            json.forEach(item => {
+                if (!departmentFromURL || item.DEPARTAMENTO === departmentFromURL) {
+                    uniqueItems.add(JSON.stringify(item)); // Convertimos el objeto a cadena para comparación en el conjunto
+                }
+            });
+
+            const arrObject = Array.from(uniqueItems).map(item => JSON.parse(item));
 
             setJsonData(arrObject);
             setIsLoading(false);
@@ -61,7 +69,6 @@ const ExcelToJsonConverter = () => {
             setIsLoading(false);
         }
     };
-
     const handleSearch = () => {
         if (!searchText) {
             // Si no hay texto de búsqueda, muestra todos los datos
