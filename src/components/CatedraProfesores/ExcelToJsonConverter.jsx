@@ -39,7 +39,7 @@ const ExcelToJsonConverter = () => {
 
     // Función para obtener los datos del archivo Excel desde la URL
     const fetchExcelData = async () => {
-        const url = 'https://urosario.edu.co/sites/default/files/2023-07/Reporte-24-de-julio.xlsx';
+        const url = 'https://urosario.edu.co/sites/default/files/2023-08/listado-profesores-22-de-agosto-2023.xlsx';
 
         try {
             // Realizamos la petición para obtener el archivo Excel
@@ -53,15 +53,20 @@ const ExcelToJsonConverter = () => {
             // Filtrado de datos basado en la ruta URL y condiciones específicas
             const departmentFromURL = getDepartmentFromURL(window.location.href);
             const uniqueItems = new Set(); // Utilizamos un conjunto para almacenar elementos únicos
+            const processedCedulas = new Set(); // Para rastrear cédulas procesadas
 
             json.forEach(item => {
-                if (!departmentFromURL || item.DEPARTAMENTO === departmentFromURL) {
+                if ((item.DEPARTAMENTO === departmentFromURL) &&
+                    (item.CLASE_DOCENTE === "HC PREGRADO" || item.CLASE_DOCENTE === "HC POSGRADO") &&
+                    !processedCedulas.has(item.CEDULA)) {
                     uniqueItems.add(JSON.stringify(item)); // Convertimos el objeto a cadena para comparación en el conjunto
+                    processedCedulas.add(item.CEDULA); // Registrar cédula procesada
                 }
             });
 
             const arrObject = Array.from(uniqueItems).map(item => JSON.parse(item));
 
+            console.log('arrObject>>>>', arrObject)
             setJsonData(arrObject);
             setIsLoading(false);
         } catch (error) {
@@ -76,7 +81,7 @@ const ExcelToJsonConverter = () => {
             setCurrentPage(1);
             return;
         }
-    
+
         const filteredData = jsonData?.filter(item => {
             // Filtrar solo por campos relevantes
             const fieldsToSearch = [item.NOMBRES, item.CORREO_PERSONAL, item.DEPARTAMENTO];
@@ -90,11 +95,11 @@ const ExcelToJsonConverter = () => {
                 }
                 return false;
             });
-        });  
+        });
         setFilteredData(filteredData || []);
         setCurrentPage(1);
     };
-    
+
     // Función para limpiar el filtro y mostrar todos los datos nuevamente
     const handleClearSearch = () => {
         setFilteredData(null); // Al limpiar la búsqueda, eliminamos el filtro de búsqueda
@@ -105,7 +110,7 @@ const ExcelToJsonConverter = () => {
     // Variable que determina qué datos se muestran, filtrados o no, según el texto de búsqueda
     const dataToDisplay = searchText !== '' ? (filteredData || []) : (jsonData || []);
 
-      // Ordenar los elementos en orden alfabético según EMP_APELLIDO1
+    // Ordenar los elementos en orden alfabético según EMP_APELLIDO1
     const sortedData = dataToDisplay.slice().sort((a, b) => {
         const apellido1A = a.EMP_APELLIDO1;
         const apellido1B = b.EMP_APELLIDO1;
@@ -152,7 +157,7 @@ const ExcelToJsonConverter = () => {
                             <RenderItems currentItems={currentItems} />
                         </div>
                     </div>
-                    
+
                     {/* Renderiza los botones de paginación */}
                     <ReactPaginate
                         previousLabel={'Anterior'}
