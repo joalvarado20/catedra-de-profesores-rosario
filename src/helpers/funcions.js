@@ -1,6 +1,5 @@
 
     // Función para obtener el departamento desde la URL
-
     export  const getDepartmentFromURL = (url) => {
         if (url.includes("escuela-de-medicina-y-ciencias-de-la-salud")) {
             return "ESC MEDICINA Y CIENCIAS SALUD";

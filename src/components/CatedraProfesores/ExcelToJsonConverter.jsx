@@ -20,7 +20,7 @@ const RenderItems = ({ currentItems }) => {
 const ExcelToJsonConverter = () => {
     // Estados del componente
     const [jsonData, setJsonData] = useState(null); // Estado para almacenar los datos del archivo Excel
-    const [filteredData, setFilteredData] = useState(null); // Estado para almacenar los datos filtrados por búsqueda
+    const [filterData, setfilterData] = useState(null); // Estado para almacenar los datos filtrados por búsqueda
     const [searchText, setSearchText] = useState(''); // Estado para almacenar el texto de búsqueda
     const [isLoading, setIsLoading] = useState(true); // Estado para mostrar un mensaje de carga mientras se obtienen los datos
     const [currentPage, setCurrentPage] = useState(1); // Estado para mantener el número de página actual
@@ -77,12 +77,12 @@ const ExcelToJsonConverter = () => {
     const handleSearch = () => {
         if (!searchText) {
             // Si no hay texto de búsqueda, muestra todos los datos
-            setFilteredData(jsonData || []);
+            setfilterData(jsonData || []);
             setCurrentPage(1);
             return;
         }
 
-        const filteredData = jsonData?.filter(item => {
+        const filterData = jsonData?.filter(item => {
             // Filtrar solo por campos relevantes
             const fieldsToSearch = [item.NOMBRES, item.CORREO_PERSONAL, item.DEPARTAMENTO];
             return fieldsToSearch.some(value => {
@@ -96,19 +96,19 @@ const ExcelToJsonConverter = () => {
                 return false;
             });
         });
-        setFilteredData(filteredData || []);
+        setfilterData(filterData || []);
         setCurrentPage(1);
     };
 
     // Función para limpiar el filtro y mostrar todos los datos nuevamente
     const handleClearSearch = () => {
-        setFilteredData(null); // Al limpiar la búsqueda, eliminamos el filtro de búsqueda
+        setfilterData(null); // Al limpiar la búsqueda, eliminamos el filtro de búsqueda
         setSearchText('');
         setCurrentPage(1); // Reseteamos la página actual a 1 después de limpiar la búsqueda
     };
 
     // Variable que determina qué datos se muestran, filtrados o no, según el texto de búsqueda
-    const dataToDisplay = searchText !== '' ? (filteredData || []) : (jsonData || []);
+    const dataToDisplay = searchText !== '' ? (filterData || []) : (jsonData || []);
 
     // Ordenar los elementos en orden alfabético según EMP_APELLIDO1
     const sortedData = dataToDisplay.slice().sort((a, b) => {
@@ -147,7 +147,7 @@ const ExcelToJsonConverter = () => {
                     </div>
 
                     {/* Renderizamos el mensaje de error si no hay coincidencias */}
-                    {filteredData && filteredData.length === 0 && searchText && (
+                    {filterData && filterData.length === 0 && searchText && (
                         <ErrorMessage />
                     )}
 
