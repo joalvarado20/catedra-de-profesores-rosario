@@ -39,7 +39,7 @@ const ExcelToJsonConverter = () => {
 
     // Función para obtener los datos del archivo Excel desde la URL
     const fetchExcelData = async () => {
-        const url = 'https://urosario.edu.co/sites/default/files/2023-08/listado-profesores-22-de-agosto-2023.xlsx';
+        const url = ' https://urosario.edu.co/sites/default/files/2023-09/data-profesores.xlsx';
 
         try {
             // Realizamos la petición para obtener el archivo Excel
@@ -84,7 +84,7 @@ const ExcelToJsonConverter = () => {
 
         const filterData = jsonData?.filter(item => {
             // Filtrar solo por campos relevantes
-            const fieldsToSearch = [item.NOMBRES, item.CORREO_PERSONAL, item.DEPARTAMENTO];
+            const fieldsToSearch = [item.NOMBRES, item.EMAIL_INST, item.DEPARTAMENTO];
             return fieldsToSearch.some(value => {
                 if (value && typeof value === 'string') {
                     // Normalizar texto y eliminar espacios en blanco

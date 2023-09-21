@@ -57,8 +57,8 @@ const PersonCard = ({ person }) => {
                     {capitalizeWithAccents(nombreAcentuado)}
                 </h4>
                 <i className="fas fa-envelope" style={iconStyle}></i>{' '}
-                <a href={`mailto:${person.CORREO_PERSONAL}`} style={linkStyle}>
-                    {person.CORREO_PERSONAL.toLowerCase()}
+                <a href={`mailto:${person.EMAIL_INST}`} style={linkStyle}>
+                    {person.EMAIL_INST.toLowerCase()}
                 </a>
                 <br />
                 {(person.UBIC_URO && person.UBIC_URO !== 'SIN REGISTRO') ?
